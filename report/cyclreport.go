@@ -17,7 +17,11 @@ func GenerateSortedCReport() {
 
 func readOriginalReport() map[int][]string {
 	lines := utility.ReadLines("./reportfile/1")
-	lines = filterContent(lines)
+	lines = filterContentOut(lines, "a total cyclomatic complexity")
+	return stringToMapUsingCycls(lines)
+}
+
+func stringToMapUsingCycls(lines []string) map[int][]string {
 	cycls := make(map[int][]string)
 
 	for _, v := range lines {
@@ -30,9 +34,9 @@ func readOriginalReport() map[int][]string {
 	return cycls
 }
 
-func filterContent(c []string) []string {
+func filterContentOut(c []string, filter string) []string {
 	for i, v := range c {
-		if strings.Contains(v, "a total cyclomatic complexity") {
+		if strings.Contains(v, filter) {
 			c[i] = c[len(c)-1]
 			c = c[:len(c)-1]
 		}
