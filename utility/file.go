@@ -3,6 +3,8 @@ package utility
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -22,4 +24,13 @@ func ReadLines(path string) []string {
 	}
 
 	return lines
+}
+
+func ReadLinesToBytes(path string) []byte {
+	fileContent, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return fileContent
 }

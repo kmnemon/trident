@@ -1,7 +1,0 @@
-D:\10_Code\DTO.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 1.
-D:\10_Code\DTO.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 2.
-D:\10_Code\DTO.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 15.
-D:\10_Code\DTO2.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 13.
-D:\10_Code\DTO3.java:183: CyclomaticComplexity: The class 'sdfsdf' has a total cyclomatic complexity of 95.
-D:\10_Code\DTO3.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 5.
-D:\10_Code\DTO3.java:183: CyclomaticComplexity: The method 'sdfsdf' has a cyclomatic complexity of 5.

@@ -6,10 +6,6 @@ import (
 	"trident/utility"
 )
 
-func TestFileToMap(t *testing.T) {
-	readOriginalReport()
-}
-
 func TestStringToMapUsingCycls(t *testing.T) {
 	a := []string{
 		`D:\10_Code\DTO.java:184: CyclomaticComplexity: The method 'sdf' has a cyclomatic complexity of 2.`,

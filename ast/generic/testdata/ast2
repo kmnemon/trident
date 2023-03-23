@@ -1,0 +1,5 @@
+---
+root(Type=CompilationUnit): 
+    types: 
+        - type(Type=ClassOrInterfaceDeclaration)
+        - type2

@@ -1,0 +1,15 @@
+---
+root(Type=CompilationUnit): 
+    types: 
+        - type(Type=ClassOrInterfaceDeclaration): 
+            isInterface: "false"
+            name(Type=SimpleName): 
+                identifier: "X"
+            members: 
+                - member(Type=FieldDeclaration): 
+                    variables: 
+                        - variable(Type=VariableDeclarator): 
+                            name(Type=SimpleName): 
+                                identifier: "x"
+                            type(Type=PrimitiveType): 
+                                type: "INT"
