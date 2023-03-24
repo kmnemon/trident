@@ -1,5 +1,9 @@
 ---
 root(Type=CompilationUnit): 
+    import:
+        name(haha)
+    good:
+        what
     types: 
         - type(Type=ClassOrInterfaceDeclaration)
         - type2
