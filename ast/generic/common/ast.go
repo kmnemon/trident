@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"log"
 	"reflect"
 	"trident/utility"
@@ -10,58 +9,90 @@ import (
 )
 
 type Ast[T any] struct {
-	astdata map[string]T
+	astData     map[string]T
+	packageName string
+	classNames  []string
+	funcNames   []string
 }
 
 func (ast *Ast[T]) init() {
-	ast.astdata = make(map[string]T)
+	ast.astData = make(map[string]T)
+	ast.classNames = make([]string, 0)
+	ast.funcNames = make([]string, 0)
 }
 
 func (ast *Ast[T]) generateAstdataFromAstFile(path string) {
 	bytes := utility.ReadLinesToBytes(path)
 
-	err := yaml.Unmarshal([]byte(bytes), &ast.astdata)
+	err := yaml.Unmarshal([]byte(bytes), &ast.astData)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
 }
 
-func (ast *Ast[T]) transverseAny(a any, filter func(string) bool, operate func(T)) string {
-	va := reflect.ValueOf(a)
+func (ast *Ast[T]) transverseAny(data any, filter func(string) bool, operate func(T) bool) string {
+	va := reflect.ValueOf(data)
+	var r string
 	switch va.Kind() {
-	case reflect.Map:
-		ast.transverseMap(a.(map[string]any), filter, operate)
-	case reflect.Slice:
-		ast.transverseSlice(a.([]T), filter, operate)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return va.String()
+		r = va.String()
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return va.String()
+		r = va.String()
 	case reflect.Float32, reflect.Float64:
-		return va.String()
+		r = va.String()
 	case reflect.String:
-		return va.String()
+		r = va.String()
+	case reflect.Map:
+		r = ast.transverseMap(data.(map[string]any), filter, operate)
+	case reflect.Slice:
+		r = ast.transverseSlice(data.([]T), filter, operate)
 
 	default:
-		panic("less with wrong basic types")
+		panic("wrong basic types")
 	}
 
-	return va.String()
+	return r
 }
 
-func (ast *Ast[T]) transverseMap(a map[string]any, filter func(string) bool, operate func(T)) {
+func (ast *Ast[T]) transverseMap(a map[string]any, filter func(string) bool, operate func(T) bool) string {
+	var r string
 	for k, v := range a {
-		fmt.Println(k)
-		// if filter(k) {
-		// 	operate(v)
-		// }
+		// fmt.Println(k)
+		if filter(k) {
+			//operate bool deside when to stop transverse
+			if operate(v.(T)) {
+				return ""
+			}
+		}
 
-		fmt.Println(ast.transverseAny(v, filter, operate))
+		r = ast.transverseAny(v, filter, operate)
 	}
+	return r
 }
 
-func (ast *Ast[T]) transverseSlice(a []T, filter func(string) bool, operate func(T)) {
+func (ast *Ast[T]) transverseSlice(a []T, filter func(string) bool, operate func(T) bool) string {
+	var r string
 	for _, v := range a {
-		ast.transverseAny(v, filter, operate)
+		r = ast.transverseAny(v, filter, operate)
 	}
+	return r
+}
+
+func (ast *Ast[T]) findPackageName(data any) string {
+	var r string
+	filter := func(s string) bool {
+		if s == "Type=PackageDeclaration" {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	operate := func(a T) bool {
+
+		return true
+	}
+
+	ast.transverseAny(ast.astData, filter, operate)
+	return r
 }

@@ -1,9 +1,9 @@
 package common
 
 import (
-	"fmt"
 	"os"
 	"testing"
+	"trident/utility"
 )
 
 var ast Ast[any]
@@ -28,10 +28,65 @@ func TestGenerateAstdataFromAstFile(t *testing.T) {
 	var ast Ast[any]
 	ast.init()
 	ast.generateAstdataFromAstFile("../testdata/ast2")
-	fmt.Println("hello")
+
+	var r []string = make([]string, 0)
+	for k, v := range ast.astData {
+		r = append(r, k)
+		for k1 := range v.(map[string]any) {
+			r = append(r, k1)
+		}
+	}
+
+	expect := []string{"root(Type=CompilationUnit)", "import", "good", "types"}
+
+	if !utility.EqualSliceHelper(expect, r) {
+		t.Error("generate astdata wrong")
+	}
 }
 
-func TestTransverseMap(t *testing.T) {
-	ast.transverseMap(ast.astdata, nil, nil)
+func TestTransverseAny(t *testing.T) {
+	var r string
+	filter := func(s string) bool {
+		if s == "good" {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	operate := func(a any) bool {
+		r = a.(string)
+		return false
+	}
+
+	ast.transverseAny(ast.astData, filter, operate)
+
+	if r != "what" {
+		t.Error("transverse any wrong")
+	}
+
+}
+
+func TestTransverseAnyContainSlice(t *testing.T) {
+	var r []any
+	filter := func(s string) bool {
+		if s == "types" {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	operate := func(a any) bool {
+		r = a.([]any)
+		return false
+	}
+
+	ast.transverseAny(ast.astData, filter, operate)
+
+	expect := []any{"type(Type=ClassOrInterfaceDeclaration)", "type2"}
+	if !utility.EqualSliceHelper(expect, r) {
+		t.Error("transverse any contain slice wrong")
+	}
 
 }
