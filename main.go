@@ -12,7 +12,7 @@ func main() {
 	path := filepath.Join("D:\\", "ast", "1.ast")
 	// path := filepath.Join("/Users", "ke", "go", "gotools", "trident", "ast", "generic", "testdata", "ast")
 	ast := common.NewAstData(path)
-	ast.GetPackageNames()
+	ast.GetPackageName()
 	ast.GetClassOrInterfaceNames()
 	ast.GetMethodNames()
 	ast.PrintData()

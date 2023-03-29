@@ -7,7 +7,7 @@ func NewAstData(path string) *Ast {
 	return &ast
 }
 
-func (ast *Ast) GetPackageNames() string {
+func (ast *Ast) GetPackageName() string {
 	return ast.findPackageName()
 }
 
