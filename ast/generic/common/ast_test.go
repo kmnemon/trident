@@ -6,7 +6,7 @@ import (
 	"trident/utility"
 )
 
-var ast Ast[any]
+var ast Ast
 
 func TestMain(m *testing.M) {
 	setup()
@@ -25,8 +25,6 @@ func teardown() {
 }
 
 func TestGenerateAstdataFromAstFile(t *testing.T) {
-	var ast Ast[any]
-	ast.init()
 	ast.generateAstdataFromAstFile("../testdata/ast2")
 
 	var r []string = make([]string, 0)
@@ -87,6 +85,16 @@ func TestTransverseAnyContainSlice(t *testing.T) {
 	expect := []any{"type(Type=ClassOrInterfaceDeclaration)", "type2"}
 	if !utility.EqualSliceHelper(expect, r) {
 		t.Error("transverse any contain slice wrong")
+	}
+
+}
+
+func TestFindPackageName(t *testing.T) {
+	ast.generateAstdataFromAstFile("../testdata/ast")
+
+	name := ast.findPackageName()
+	if name != "ast" {
+		t.Error("find wrong package name")
 	}
 
 }

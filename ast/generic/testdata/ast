@@ -1,8 +1,11 @@
 ---
 root(Type=CompilationUnit): 
+    packageDeclaration(Type=PackageDeclaration):
+        name(Type=Name):
+            identifier: "ast"
     types: 
         - type(Type=ClassOrInterfaceDeclaration): 
-            isInterface: "false"
+            isInterface: "true"
             name(Type=SimpleName): 
                 identifier: "X"
             members: 
@@ -13,3 +16,13 @@ root(Type=CompilationUnit):
                                 identifier: "x"
                             type(Type=PrimitiveType): 
                                 type: "INT"
+                - member(Type=MethodDeclaration):
+                    body(Type=BlockStmt):
+                        variables: 
+                    name(Type=SimpleName):
+                        identifier: "fn"
+        
+        - ones:
+            member(Type=MethodDeclaration):
+                name(Type=SimpleName):
+                    identifier: "fn2"

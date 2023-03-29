@@ -1,13 +1,22 @@
 package common
 
-type AST interface {
-	// GetAllFunctionsName() []string
-	// GetAllClassesName() []string
-}
-
-func NewAstData(path string) AST {
-	var ast Ast[any]
+func NewAstData(path string) *Ast {
+	var ast Ast
 	ast.init()
 	ast.generateAstdataFromAstFile(path)
 	return &ast
+}
+
+func (ast *Ast) GetPackageNames() string {
+	return ast.findPackageName()
+}
+
+func (ast *Ast) GetClassOrInterfaceNames() []string {
+	ast.findClassOrInterfaceNames()
+	return ast.classNames
+}
+
+func (ast *Ast) GetMethodNames() []string {
+	ast.findMethodNames()
+	return ast.methodNames
 }

@@ -1,27 +1,31 @@
 package common
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"reflect"
+	"strings"
 	"trident/utility"
 
 	"gopkg.in/yaml.v3"
 )
 
-type Ast[T any] struct {
-	astData     map[string]T
-	packageName string
-	classNames  []string
-	funcNames   []string
+type Ast struct {
+	astData        map[string]any
+	packageName    string
+	interfaceNames []string
+	classNames     []string
+	methodNames    []string
 }
 
-func (ast *Ast[T]) init() {
-	ast.astData = make(map[string]T)
+func (ast *Ast) init() {
+	ast.astData = make(map[string]any)
 	ast.classNames = make([]string, 0)
-	ast.funcNames = make([]string, 0)
+	ast.methodNames = make([]string, 0)
 }
 
-func (ast *Ast[T]) generateAstdataFromAstFile(path string) {
+func (ast *Ast) generateAstdataFromAstFile(path string) {
 	bytes := utility.ReadLinesToBytes(path)
 
 	err := yaml.Unmarshal([]byte(bytes), &ast.astData)
@@ -30,7 +34,11 @@ func (ast *Ast[T]) generateAstdataFromAstFile(path string) {
 	}
 }
 
-func (ast *Ast[T]) transverseAny(data any, filter func(string) bool, operate func(T) bool) string {
+func (ast *Ast) transverseAny(data any, filter func(string) bool, operate func(any) bool) string {
+	if data == nil {
+		return ""
+	}
+
 	va := reflect.ValueOf(data)
 	var r string
 	switch va.Kind() {
@@ -45,22 +53,24 @@ func (ast *Ast[T]) transverseAny(data any, filter func(string) bool, operate fun
 	case reflect.Map:
 		r = ast.transverseMap(data.(map[string]any), filter, operate)
 	case reflect.Slice:
-		r = ast.transverseSlice(data.([]T), filter, operate)
+		r = ast.transverseSlice(data.([]any), filter, operate)
 
 	default:
+		fmt.Println(data)
+		fmt.Println(va)
 		panic("wrong basic types")
 	}
 
 	return r
 }
 
-func (ast *Ast[T]) transverseMap(a map[string]any, filter func(string) bool, operate func(T) bool) string {
+func (ast *Ast) transverseMap(data map[string]any, filter func(string) bool, operate func(any) bool) string {
 	var r string
-	for k, v := range a {
+	for k, v := range data {
 		// fmt.Println(k)
 		if filter(k) {
-			//operate bool deside when to stop transverse
-			if operate(v.(T)) {
+			//operate bool decide when to stop transverse
+			if operate(v) {
 				return ""
 			}
 		}
@@ -70,29 +80,42 @@ func (ast *Ast[T]) transverseMap(a map[string]any, filter func(string) bool, ope
 	return r
 }
 
-func (ast *Ast[T]) transverseSlice(a []T, filter func(string) bool, operate func(T) bool) string {
+func (ast *Ast) transverseSlice(data []any, filter func(string) bool, operate func(any) bool) string {
 	var r string
-	for _, v := range a {
+	for _, v := range data {
 		r = ast.transverseAny(v, filter, operate)
 	}
 	return r
 }
 
-func (ast *Ast[T]) findPackageName(data any) string {
-	var r string
+func (ast *Ast) findPackageName() string {
 	filter := func(s string) bool {
-		if s == "Type=PackageDeclaration" {
+		if strings.Contains(s, "Type=PackageDeclaration") {
 			return true
 		} else {
 			return false
 		}
 	}
 
-	operate := func(a T) bool {
-
+	operate := func(data any) bool {
+		name, err := findNameOperate(data, "Name")
+		if err != nil {
+			panic("can not find package name in java file")
+		}
+		ast.packageName = name
 		return true
 	}
 
 	ast.transverseAny(ast.astData, filter, operate)
-	return r
+	return ast.packageName
+}
+
+func findNameOperate(data any, nameType string) (string, error) {
+	if reflect.ValueOf(data).Kind() != reflect.Map {
+		return "", errors.New("find name operate wrong, data is not map")
+	}
+
+	nameTypeFormat := "name(Type=" + nameType + ")"
+	return data.(map[string]any)[nameTypeFormat].(map[string]any)["identifier"].(string), nil
+
 }
