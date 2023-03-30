@@ -1,0 +1,27 @@
+---
+root(Type=CompilationUnit): 
+    packageDeclaration(Type=PackageDeclaration):
+        name(Type=Name):
+            identifier: "ast"
+    types: 
+        - type(Type=ClassOrInterfaceDeclaration): 
+            isInterface: "true"
+            name(Type=SimpleName): 
+                identifier: "Y"
+            members: 
+                - member(Type=FieldDeclaration): 
+                    variables: 
+                        - variable(Type=VariableDeclarator): 
+                            name(Type=SimpleName): 
+                                identifier: "x"
+                            type(Type=PrimitiveType): 
+                                type: "INT"
+                - member(Type=MethodDeclaration):
+                    body(Type=BlockStmt):
+                        variables: 
+                    name(Type=SimpleName):
+                        identifier: "fn"
+        
+                - member(Type=MethodDeclaration):
+                    name(Type=SimpleName):
+                        identifier: "fn2"

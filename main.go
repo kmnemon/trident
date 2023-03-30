@@ -3,18 +3,17 @@ package main
 import (
 	"fmt"
 	"path/filepath"
-	"trident/ast/generic/common"
+	"trident/ast/object"
 )
 
 func main() {
 	// report.GenerateSortedCReport()
-	fmt.Println("start")
-	path := filepath.Join("D:\\", "ast", "1.ast")
-	// path := filepath.Join("/Users", "ke", "go", "gotools", "trident", "ast", "generic", "testdata", "ast")
-	ast := common.NewAstData(path)
-	ast.GetPackageName()
-	ast.GetClassOrInterfaceNames()
-	ast.GetMethodNames()
-	ast.PrintData()
+	fmt.Println("start...")
+	// path := filepath.Join(".", "source1")
+	path := filepath.Join(".", "ast", "testdata")
+
+	p := object.GenerateObjects(path)
+	fmt.Println(p.ToString())
+
 	fmt.Println("done")
 }

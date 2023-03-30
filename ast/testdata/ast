@@ -22,7 +22,6 @@ root(Type=CompilationUnit):
                     name(Type=SimpleName):
                         identifier: "fn"
         
-        - ones:
-            member(Type=MethodDeclaration):
-                name(Type=SimpleName):
-                    identifier: "fn2"
+                - member(Type=MethodDeclaration):
+                    name(Type=SimpleName):
+                        identifier: "fn2"

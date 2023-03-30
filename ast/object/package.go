@@ -7,9 +7,21 @@ type Package struct {
 }
 
 func NewPackage(name string) *Package {
-	var p Package
-	p.name = name
-	p.classes = make(map[string]Class)
-	p.interfaces = make(map[string]Interface)
-	return &p
+	var pack Package
+	pack.name = name
+	pack.classes = make(map[string]Class)
+	pack.interfaces = make(map[string]Interface)
+	return &pack
+}
+
+func (pack *Package) GetName() string {
+	return pack.name
+}
+
+func (pack *Package) GetClasses() map[string]Class {
+	return pack.classes
+}
+
+func (pack *Package) GetInterfaces() map[string]Interface {
+	return pack.interfaces
 }

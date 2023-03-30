@@ -17,9 +17,9 @@ func (ast *Ast) findClassOrInterfaceNames() {
 			panic("can not find classes or interface name in class declaration")
 		}
 		if isInterface(data) {
-			ast.interfaceNames = append(ast.interfaceNames, name)
+			ast.interfacesNames = append(ast.interfacesNames, name)
 		} else {
-			ast.classNames = append(ast.classNames, name)
+			ast.classesNames = append(ast.classesNames, name)
 		}
 		return false
 	}

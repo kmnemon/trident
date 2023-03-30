@@ -2,7 +2,6 @@ package common
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"reflect"
 	"strings"
@@ -12,17 +11,33 @@ import (
 )
 
 type Ast struct {
-	astData        map[string]any
-	packageName    string
-	interfaceNames []string
-	classNames     []string
-	methodNames    []string
+	astData         map[string]any
+	packageName     string
+	interfacesNames []string
+	classesNames    []string
+	methodsNames    []string
 }
 
 func (ast *Ast) init() {
 	ast.astData = make(map[string]any)
-	ast.classNames = make([]string, 0)
-	ast.methodNames = make([]string, 0)
+	ast.classesNames = make([]string, 0)
+	ast.methodsNames = make([]string, 0)
+}
+
+func (ast *Ast) GetPackageName() string {
+	return ast.packageName
+}
+
+func (ast *Ast) GetClassesNames() []string {
+	return ast.classesNames
+}
+
+func (ast *Ast) GetInterfacesNames() []string {
+	return ast.interfacesNames
+}
+
+func (ast *Ast) GetMethodsNames() []string {
+	return ast.methodsNames
 }
 
 func (ast *Ast) generateAstdataFromAstFile(path string) {
@@ -56,9 +71,9 @@ func (ast *Ast) transverseAny(data any, filter func(string) bool, operate func(a
 		r = ast.transverseSlice(data.([]any), filter, operate)
 
 	default:
-		fmt.Println(data)
-		fmt.Println(va)
-		panic("wrong basic types")
+		log.Println(data)
+		log.Println(va)
+		log.Fatal("wrong basic types")
 	}
 
 	return r
@@ -100,7 +115,7 @@ func (ast *Ast) findPackageName() string {
 	operate := func(data any) bool {
 		name, err := findNameOperate(data, "Name")
 		if err != nil {
-			panic("can not find package name in java file")
+			log.Fatal("can not find package name in java file")
 		}
 		ast.packageName = name
 		return true

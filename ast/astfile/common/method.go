@@ -12,12 +12,18 @@ func (ast *Ast) findMethodNames() {
 	}
 
 	operate := func(data any) bool {
-		className, err := findNameOperate(data, "SimpleName")
+		classOrInterfaceName, err := findNameOperate(data, "SimpleName")
 		if err != nil {
 			panic("can not find classes or interface name in class declaration")
 		}
 
-		ast.findMethodNamesInClass(data, className)
+		if isInterface(data) {
+			classOrInterfaceName = "i." + classOrInterfaceName
+		} else {
+			classOrInterfaceName = "c." + classOrInterfaceName
+		}
+
+		ast.findMethodNamesInClass(data, classOrInterfaceName)
 
 		return false
 	}
@@ -39,7 +45,7 @@ func (ast *Ast) findMethodNamesInClass(data any, className string) {
 		if err != nil {
 			panic("can not find classes or interface name in class declaration")
 		}
-		ast.methodNames = append(ast.methodNames, className+"."+methodName)
+		ast.methodsNames = append(ast.methodsNames, className+"."+methodName)
 		return false
 	}
 

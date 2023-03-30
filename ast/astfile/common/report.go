@@ -6,9 +6,9 @@ func (ast *Ast) PrintData() {
 	fmt.Println("~~~package~~~")
 	fmt.Println(ast.packageName)
 	fmt.Println("~~~interface~~~")
-	fmt.Println(ast.interfaceNames)
+	fmt.Println(ast.interfacesNames)
 	fmt.Println("~~~class~~~")
-	fmt.Println(ast.classNames)
+	fmt.Println(ast.classesNames)
 	fmt.Println("~~method~~~")
-	fmt.Println(ast.methodNames)
+	fmt.Println(ast.methodsNames)
 }

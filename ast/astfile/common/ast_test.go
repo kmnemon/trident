@@ -18,14 +18,14 @@ func TestMain(m *testing.M) {
 
 func setup() {
 	ast.init()
-	ast.generateAstdataFromAstFile("../testdata/ast2")
+	ast.generateAstdataFromAstFile("../../testdata/ast2")
 }
 
 func teardown() {
 }
 
 func TestGenerateAstdataFromAstFile(t *testing.T) {
-	ast.generateAstdataFromAstFile("../testdata/ast2")
+	ast.generateAstdataFromAstFile("../../testdata/ast2")
 
 	var r []string = make([]string, 0)
 	for k, v := range ast.astData {
@@ -90,7 +90,7 @@ func TestTransverseAnyContainSlice(t *testing.T) {
 }
 
 func TestFindPackageName(t *testing.T) {
-	ast.generateAstdataFromAstFile("../testdata/ast")
+	ast.generateAstdataFromAstFile("../../testdata/ast")
 
 	name := ast.findPackageName()
 	if name != "ast" {
