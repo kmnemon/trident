@@ -6,7 +6,7 @@ import (
 	"trident/ast/object"
 )
 
-func (ast *Ast) findPackageName(p *object.Project) string {
+func (a *ast) findPackageName(p *object.Project) string {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=PackageDeclaration") {
 			return true
@@ -20,19 +20,19 @@ func (ast *Ast) findPackageName(p *object.Project) string {
 		if err != nil {
 			log.Fatal("can not find package name in java file")
 		}
-		ast.packageName = name
+		a.packageName = name
 		generatePackage(name, p)
 		return true
 	}
 
-	ast.transverseAny(ast.astData, filter, operate)
-	return ast.packageName
+	a.transverseAny(a.astData, filter, operate)
+	return a.packageName
 }
 
 func generatePackage(name string, p *object.Project) {
 	_, ok := p.Packages[name]
 	if !ok {
 		pack := object.NewPackage(name)
-		p.Packages[name] = *pack
+		p.Packages[name] = pack
 	}
 }

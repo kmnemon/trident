@@ -5,13 +5,17 @@ import (
 )
 
 func TestFindClassOrInterfaceNames(t *testing.T) {
-	ast.generateAstdataFromAstFile("../../testdata/ast")
+	a.generateAstdataFromAstFile("../../testdata/ast")
 
-	ast.findPackageName(p)
-	ast.findClassOrInterfaceNames(p)
+	a.findPackageName(p)
+	a.findClassOrInterfaceNames(p)
 
-	if p.Packages[ast.packageName].Classes["X"].Name != "X" {
+	if p.Packages[a.packageName].Classes["X"].Name != "X" {
 		t.Error("find wrong classes")
+	}
+
+	if p.Packages[a.packageName].Classes["X"].VariableCount != 1 {
+		t.Error("find wrong number of classes variable")
 	}
 
 }

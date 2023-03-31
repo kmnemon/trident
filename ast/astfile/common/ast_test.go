@@ -7,7 +7,7 @@ import (
 	"trident/utility"
 )
 
-var ast Ast
+var a ast
 var p *object.Project
 
 func TestMain(m *testing.M) {
@@ -19,30 +19,12 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	ast.init()
-	ast.generateAstdataFromAstFile("../../testdata/ast2")
+	a.init()
+	a.generateAstdataFromAstFile("../../testdata/ast2")
 	p = object.NewProject("1")
 }
 
 func teardown() {
-}
-
-func TestGenerateAstdataFromAstFile(t *testing.T) {
-	ast.generateAstdataFromAstFile("../../testdata/ast2")
-
-	var r []string = make([]string, 0)
-	for k, v := range ast.astData {
-		r = append(r, k)
-		for k1 := range v.(map[string]any) {
-			r = append(r, k1)
-		}
-	}
-
-	expect := []string{"root(Type=CompilationUnit)", "import", "good", "types"}
-
-	if !utility.EqualSliceHelper(expect, r) {
-		t.Error("generate astdata wrong")
-	}
 }
 
 func TestTransverseAny(t *testing.T) {
@@ -60,7 +42,7 @@ func TestTransverseAny(t *testing.T) {
 		return false
 	}
 
-	ast.transverseAny(ast.astData, filter, operate)
+	a.transverseAny(a.astData, filter, operate)
 
 	if r != "what" {
 		t.Error("transverse any wrong")
@@ -83,7 +65,7 @@ func TestTransverseAnyContainSlice(t *testing.T) {
 		return false
 	}
 
-	ast.transverseAny(ast.astData, filter, operate)
+	a.transverseAny(a.astData, filter, operate)
 
 	expect := []any{"type(Type=ClassOrInterfaceDeclaration)", "type2"}
 	if !utility.EqualSliceHelper(expect, r) {

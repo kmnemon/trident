@@ -7,13 +7,13 @@ import (
 
 type Project struct {
 	Name     string
-	Packages map[string]Package
+	Packages map[string]*Package
 }
 
 func NewProject(name string) *Project {
 	var p Project
 	p.Name = name
-	p.Packages = make(map[string]Package)
+	p.Packages = make(map[string]*Package)
 	return &p
 }
 

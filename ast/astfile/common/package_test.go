@@ -26,9 +26,9 @@ func TestGenerateObjects(t *testing.T) {
 }
 
 func TestFindPackageName(t *testing.T) {
-	ast.generateAstdataFromAstFile("../../testdata/ast")
+	a.generateAstdataFromAstFile("../../testdata/ast")
 
-	name := ast.findPackageName(p)
+	name := a.findPackageName(p)
 	if name != "ast" {
 		t.Error("find wrong package name")
 	}

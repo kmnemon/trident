@@ -1,5 +1,5 @@
 package common
 
-func (ast *Ast) PrintData() {
+func (a *ast) PrintData() {
 
 }

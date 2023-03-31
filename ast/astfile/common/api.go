@@ -26,11 +26,11 @@ func GenerateObjects(astfileDir string) *object.Project {
 }
 
 func NewAstFileAddToObject(path string, p *object.Project) {
-	var ast Ast
-	ast.init()
-	ast.generateAstdataFromAstFile(path)
+	var a ast
+	a.init()
+	a.generateAstdataFromAstFile(path)
 
-	ast.findPackageName(p)
-	ast.findClassOrInterfaceNames(p)
-	ast.findMethodNames(p)
+	a.findPackageName(p)
+	a.findClassOrInterfaceNames(p)
+	a.findMethodNames(p)
 }

@@ -3,14 +3,18 @@ package common
 import "testing"
 
 func TestFindMethodNames(t *testing.T) {
-	ast.generateAstdataFromAstFile("../../testdata/ast")
+	a.generateAstdataFromAstFile("../../testdata/ast")
 
-	ast.findPackageName(p)
-	ast.findClassOrInterfaceNames(p)
-	ast.findMethodNames(p)
+	a.findPackageName(p)
+	a.findClassOrInterfaceNames(p)
+	a.findMethodNames(p)
 
-	if len(p.Packages[ast.packageName].Classes["X"].Methods) != 2 {
+	if len(p.Packages[a.packageName].Classes["X"].Methods) != 2 {
 		t.Error("find wrong methods")
+	}
+
+	if p.Packages[a.packageName].Classes["X"].Methods["fn2"].ParameterCount != 2 {
+		t.Error("find wrong method parameter")
 	}
 
 }

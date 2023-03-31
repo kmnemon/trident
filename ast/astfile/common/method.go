@@ -5,7 +5,7 @@ import (
 	"trident/ast/object"
 )
 
-func (ast *Ast) findMethodNames(p *object.Project) {
+func (a *ast) findMethodNames(p *object.Project) {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=ClassOrInterfaceDeclaration") {
 			return true
@@ -20,15 +20,15 @@ func (ast *Ast) findMethodNames(p *object.Project) {
 			panic("can not find classes or interface name in class declaration")
 		}
 
-		ast.findMethodNamesInClass(data, classOrInterfaceName, p)
+		a.findMethodNamesInClass(data, classOrInterfaceName, p)
 
 		return false
 	}
 
-	ast.transverseAny(ast.astData, filter, operate)
+	a.transverseAny(a.astData, filter, operate)
 }
 
-func (ast *Ast) findMethodNamesInClass(data any, className string, p *object.Project) {
+func (a *ast) findMethodNamesInClass(data any, className string, p *object.Project) {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=MethodDeclaration") {
 			return true
@@ -42,14 +42,33 @@ func (ast *Ast) findMethodNamesInClass(data any, className string, p *object.Pro
 		if err != nil {
 			panic("can not find classes or interface name in class declaration")
 		}
-		generateMethods(ast.packageName, className, methodName, p)
+		generateMethods(a.packageName, className, methodName, p)
+		a.findParameters(data, className, methodName, p)
 		return false
 	}
 
-	ast.transverseAny(data, filter, operate)
+	a.transverseAny(data, filter, operate)
 }
 
 func generateMethods(packname, cname, mname string, p *object.Project) {
 	m := object.NewMethod(mname)
-	p.Packages[packname].Classes[cname].Methods[m.Name] = *m
+	p.Packages[packname].Classes[cname].Methods[m.Name] = m
+}
+
+func (a *ast) findParameters(data any, cname, mname string, p *object.Project) {
+	filter := func(s string) bool {
+		if strings.Contains(s, "parameter(Type=Parameter)") {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	operate := func(data any) bool {
+		p.Packages[a.packageName].Classes[cname].Methods[mname].ParameterCount += 1
+
+		return false
+	}
+
+	a.transverseAny(data, filter, operate)
 }

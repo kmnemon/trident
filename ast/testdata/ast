@@ -25,3 +25,10 @@ root(Type=CompilationUnit):
                 - member(Type=MethodDeclaration):
                     name(Type=SimpleName):
                         identifier: "fn2"
+                    parameters:
+                        - parameter(Type=Parameter):
+                            name(Type=SimpleName):
+                                identifier: "o1"
+                        - parameter(Type=Parameter):
+                            name(Type=SimpleName):
+                                identifier: "o2"
