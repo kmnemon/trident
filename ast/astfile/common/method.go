@@ -1,8 +1,11 @@
 package common
 
-import "strings"
+import (
+	"strings"
+	"trident/ast/object"
+)
 
-func (ast *Ast) findMethodNames() {
+func (ast *Ast) findMethodNames(p *object.Project) {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=ClassOrInterfaceDeclaration") {
 			return true
@@ -17,13 +20,7 @@ func (ast *Ast) findMethodNames() {
 			panic("can not find classes or interface name in class declaration")
 		}
 
-		if isInterface(data) {
-			classOrInterfaceName = "i." + classOrInterfaceName
-		} else {
-			classOrInterfaceName = "c." + classOrInterfaceName
-		}
-
-		ast.findMethodNamesInClass(data, classOrInterfaceName)
+		ast.findMethodNamesInClass(data, classOrInterfaceName, p)
 
 		return false
 	}
@@ -31,7 +28,7 @@ func (ast *Ast) findMethodNames() {
 	ast.transverseAny(ast.astData, filter, operate)
 }
 
-func (ast *Ast) findMethodNamesInClass(data any, className string) {
+func (ast *Ast) findMethodNamesInClass(data any, className string, p *object.Project) {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=MethodDeclaration") {
 			return true
@@ -45,9 +42,14 @@ func (ast *Ast) findMethodNamesInClass(data any, className string) {
 		if err != nil {
 			panic("can not find classes or interface name in class declaration")
 		}
-		ast.methodsNames = append(ast.methodsNames, className+"."+methodName)
+		generateMethods(ast.packageName, className, methodName, p)
 		return false
 	}
 
 	ast.transverseAny(data, filter, operate)
+}
+
+func generateMethods(packname, cname, mname string, p *object.Project) {
+	m := object.NewMethod(mname)
+	p.Packages[packname].Classes[cname].Methods[m.Name] = *m
 }

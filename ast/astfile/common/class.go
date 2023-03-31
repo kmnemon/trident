@@ -1,8 +1,11 @@
 package common
 
-import "strings"
+import (
+	"strings"
+	"trident/ast/object"
+)
 
-func (ast *Ast) findClassOrInterfaceNames() {
+func (ast *Ast) findClassOrInterfaceNames(p *object.Project) {
 	filter := func(s string) bool {
 		if strings.Contains(s, "Type=ClassOrInterfaceDeclaration") {
 			return true
@@ -17,9 +20,9 @@ func (ast *Ast) findClassOrInterfaceNames() {
 			panic("can not find classes or interface name in class declaration")
 		}
 		if isInterface(data) {
-			ast.interfacesNames = append(ast.interfacesNames, name)
+			generateClasses(ast.packageName, name, true, p)
 		} else {
-			ast.classesNames = append(ast.classesNames, name)
+			generateClasses(ast.packageName, name, false, p)
 		}
 		return false
 	}
@@ -33,4 +36,9 @@ func isInterface(data any) bool {
 	} else {
 		return false
 	}
+}
+
+func generateClasses(packname string, cname string, isInterface bool, p *object.Project) {
+	c := object.NewClass(cname, isInterface)
+	p.Packages[packname].Classes[c.Name] = *c
 }

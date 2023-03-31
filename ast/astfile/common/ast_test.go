@@ -3,10 +3,12 @@ package common
 import (
 	"os"
 	"testing"
+	"trident/ast/object"
 	"trident/utility"
 )
 
 var ast Ast
+var p *object.Project
 
 func TestMain(m *testing.M) {
 	setup()
@@ -19,6 +21,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	ast.init()
 	ast.generateAstdataFromAstFile("../../testdata/ast2")
+	p = object.NewProject("1")
 }
 
 func teardown() {
@@ -85,16 +88,6 @@ func TestTransverseAnyContainSlice(t *testing.T) {
 	expect := []any{"type(Type=ClassOrInterfaceDeclaration)", "type2"}
 	if !utility.EqualSliceHelper(expect, r) {
 		t.Error("transverse any contain slice wrong")
-	}
-
-}
-
-func TestFindPackageName(t *testing.T) {
-	ast.generateAstdataFromAstFile("../../testdata/ast")
-
-	name := ast.findPackageName()
-	if name != "ast" {
-		t.Error("find wrong package name")
 	}
 
 }

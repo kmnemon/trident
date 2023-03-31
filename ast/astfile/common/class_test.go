@@ -1,12 +1,17 @@
 package common
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestFindClassOrInterfaceNames(t *testing.T) {
 	ast.generateAstdataFromAstFile("../../testdata/ast")
 
-	ast.findClassOrInterfaceNames()
-	if ast.GetInterfacesNames()[0] != "X" {
-		t.Error("find wrong class or interface name")
+	ast.findPackageName(p)
+	ast.findClassOrInterfaceNames(p)
+
+	if p.Packages[ast.packageName].Classes["X"].Name != "X" {
+		t.Error("find wrong classes")
 	}
+
 }

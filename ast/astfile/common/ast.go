@@ -4,40 +4,20 @@ import (
 	"errors"
 	"log"
 	"reflect"
-	"strings"
 	"trident/utility"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Ast struct {
-	astData         map[string]any
-	packageName     string
-	interfacesNames []string
-	classesNames    []string
-	methodsNames    []string
+	astData map[string]any
+
+	packageName string
 }
 
 func (ast *Ast) init() {
 	ast.astData = make(map[string]any)
-	ast.classesNames = make([]string, 0)
-	ast.methodsNames = make([]string, 0)
-}
 
-func (ast *Ast) GetPackageName() string {
-	return ast.packageName
-}
-
-func (ast *Ast) GetClassesNames() []string {
-	return ast.classesNames
-}
-
-func (ast *Ast) GetInterfacesNames() []string {
-	return ast.interfacesNames
-}
-
-func (ast *Ast) GetMethodsNames() []string {
-	return ast.methodsNames
 }
 
 func (ast *Ast) generateAstdataFromAstFile(path string) {
@@ -101,28 +81,6 @@ func (ast *Ast) transverseSlice(data []any, filter func(string) bool, operate fu
 		r = ast.transverseAny(v, filter, operate)
 	}
 	return r
-}
-
-func (ast *Ast) findPackageName() string {
-	filter := func(s string) bool {
-		if strings.Contains(s, "Type=PackageDeclaration") {
-			return true
-		} else {
-			return false
-		}
-	}
-
-	operate := func(data any) bool {
-		name, err := findNameOperate(data, "Name")
-		if err != nil {
-			log.Fatal("can not find package name in java file")
-		}
-		ast.packageName = name
-		return true
-	}
-
-	ast.transverseAny(ast.astData, filter, operate)
-	return ast.packageName
 }
 
 func findNameOperate(data any, nameType string) (string, error) {

@@ -1,20 +1,13 @@
 package object
 
 type Method struct {
-	name  string
-	lines int
+	Name           string
+	ParameterCount int
+	Lines          int
 }
 
 func NewMethod(name string) *Method {
 	var m Method
-	m.name = name
+	m.Name = name
 	return &m
-}
-
-func (m *Method) GetName() string {
-	return m.name
-}
-
-func (m *Method) GetLines() int {
-	return m.lines
 }
