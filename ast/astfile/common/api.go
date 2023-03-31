@@ -17,7 +17,7 @@ func GenerateObjects(astfileDir string) *object.Project {
 
 	for _, file := range files {
 		if !strings.HasPrefix(file.Name(), ".") {
-			NewAstFileAddToObject(filepath.Join(astfileDir, file.Name()), p)
+			newAstFileAddToObject(filepath.Join(astfileDir, file.Name()), p)
 		}
 
 	}
@@ -25,7 +25,7 @@ func GenerateObjects(astfileDir string) *object.Project {
 	return p
 }
 
-func NewAstFileAddToObject(path string, p *object.Project) {
+func newAstFileAddToObject(path string, p *object.Project) {
 	var a ast
 	a.init()
 	a.generateAstdataFromAstFile(path)

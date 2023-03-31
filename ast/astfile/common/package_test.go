@@ -5,7 +5,7 @@ import (
 )
 
 func TestAstFileToObject(t *testing.T) {
-	NewAstFileAddToObject("../../testdata/ast", p)
+	newAstFileAddToObject("../../testdata/ast", p)
 
 	if p.Packages["ast"].Name != "ast" {
 		t.Error("project get package name wrong  ")
